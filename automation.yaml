@@ -1,0 +1,18 @@
+automations:
+  - id: "task_1"
+    name: "Morning Routine"
+    trigger:
+      type: "time"
+      at: "07:00"
+    condition:
+      - type: "wifi"
+        status: "connected"
+    actions:
+      - type: "run_app"
+        app: "Spotify"
+      - type: "wait"
+        duration: 10
+      - type: "send_email"
+        to: "boss@example.com"
+        subject: "Running Late"
+        body: "Overslept, will be in soon."

@@ -1,4 +1,5 @@
-// basic YAML configuration file(will be changed probably)
+// config.rs
+#![allow(dead_code)] // Temporarily suppress unused warnings
 use serde::Deserialize;
 use std::path::PathBuf;
 
@@ -12,6 +13,7 @@ pub struct Automation {
     pub id: String,
     pub name: String,
     pub trigger: Trigger,
+    #[serde(default)]
     pub conditions: Vec<Condition>,
     pub actions: Vec<Action>,
 }
@@ -19,30 +21,32 @@ pub struct Automation {
 #[derive(Debug, Deserialize)]
 #[serde(tag = "type")]
 pub enum Trigger {
-    Time { time: String },
-    Event { event: String },
+    #[serde(rename = "time")]
+    Time { at: String },
+    #[serde(rename = "event")]
+    Event { on: String },
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(tag = "type")]
 pub enum Condition {
+    #[serde(rename = "wifi")]
     Wifi { status: String },
+    #[serde(rename = "file_exists")]
     FileExists { path: PathBuf },
-    // will add more conditions later I guess :)
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(tag = "type")]
 pub enum Action {
+    #[serde(rename = "run_app")]
     RunApp { app: String },
-    RunCommand { command: String },
-    CloseApp { app: String },
+    #[serde(rename = "wait")]
     Wait { duration: u64 },
+    #[serde(rename = "send_email")]
     SendEmail {
         to: String,
         subject: String,
         body: String,
     },
-    ClickButton { button: String },
-    // will add more actions later I guess :)
 }
